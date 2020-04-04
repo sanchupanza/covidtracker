@@ -1,6 +1,7 @@
 package com.sanchit.covidtracker.Activities.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,20 @@ public class DateWiseAdapter extends RecyclerView.Adapter<DateWiseAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull DateWiseAdapter.MyViewHolder holder, int position) {
+
+
+        if(position==0||position==1)
+        {
+            holder.binding.layout.setBackgroundResource(R.drawable.date_bg_solid);
+            holder.binding.tvCount.setTextColor(Color.parseColor("#D24C7E"));
+            holder.binding.tvDate.setTextColor(Color.parseColor("#D24C7E"));
+
+        }
         holder.binding.tvCount.setText(String.valueOf(list.get(position).getDailyconfirmed()));
         holder.binding.tvDate.setText(list.get(position).getDate());
+
+
+
     }
 
     @Override

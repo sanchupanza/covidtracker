@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.SingleRowStateBinding;
+import com.sanchit.covidtracker.databinding.SingleStateRowBinding;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
     @NonNull
     @Override
     public StatewiseDataAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        SingleRowStateBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.single_row_state,parent,false);
+        SingleStateRowBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.single_state_row,parent,false);
 
         return new StatewiseDataAdapter.MyViewHolder(binding);
     }
@@ -87,8 +88,8 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        SingleRowStateBinding binding;
-        public MyViewHolder(@NonNull SingleRowStateBinding binding) {
+        SingleStateRowBinding binding;
+        public MyViewHolder(@NonNull SingleStateRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
