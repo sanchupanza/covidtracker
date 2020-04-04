@@ -1,14 +1,20 @@
 package com.sanchit.covidtracker.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.adapters.AbsListViewBindingAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.Toast;
 
+import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
@@ -23,12 +29,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AllDataActivity extends AppCompatActivity {
+public class AllDataActivity extends AppCompatActivity   {
 
 
     private ActivityAllDataNewBinding binding;
     private Context context;
     private StatewiseDataAdapter adapter;
+    private DateWiseAdapter dateWiseAdapter;
 
 
     @Override
@@ -39,7 +46,13 @@ public class AllDataActivity extends AppCompatActivity {
 
         context = this;
         binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,true));
+
         fetchAllData();
+
+
+
+
     }
 
     private void fetchAllData() {
@@ -66,6 +79,10 @@ public class AllDataActivity extends AppCompatActivity {
 
                         adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
                         binding.rvStatewise.setAdapter(adapter);
+                        dateWiseAdapter = new DateWiseAdapter(response.body().getCasesTimeSeries(),context);
+                        binding.recyclerView.setAdapter(dateWiseAdapter);
+                        binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
+
 
 
 
@@ -92,4 +109,6 @@ public class AllDataActivity extends AppCompatActivity {
     private void sendDatatoStateWiseAdapter(List<Statewise> statewise) {
 
     }
+
+
 }

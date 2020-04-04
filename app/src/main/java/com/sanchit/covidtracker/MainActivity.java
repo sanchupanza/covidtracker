@@ -9,6 +9,7 @@ import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.rawData.RawDataResponse;
 import com.sanchit.covidtracker.response.stateWise.Delhi;
+import com.sanchit.covidtracker.response.stateWise.Kerala;
 import com.sanchit.covidtracker.response.stateWise.StatewiseResponse;
 import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+   
 
 
 
