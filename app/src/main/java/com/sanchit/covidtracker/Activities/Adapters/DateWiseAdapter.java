@@ -34,8 +34,22 @@ public class DateWiseAdapter extends RecyclerView.Adapter<DateWiseAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull DateWiseAdapter.MyViewHolder holder, int position) {
-        holder.binding.tvCount.setText(String.valueOf(list.get(position).getDailyconfirmed()));
+        holder.binding.tvCount.setText(String.valueOf(list.get(position).getTotalconfirmed()));
         holder.binding.tvDate.setText(list.get(position).getDate());
+        if(position !=list.size()-1)
+        {
+            int currentcount = Integer.parseInt(list.get(position).getTotalconfirmed());
+            int nextCount = Integer.parseInt(list.get((position+1)).getTotalconfirmed());
+            int singleCount = currentcount-nextCount;
+
+            if(singleCount !=0)
+            {
+                holder.binding.tvCount.setText(list.get(position).getTotalconfirmed() +" [+"+singleCount+"]");
+
+            }
+
+
+        }
     }
 
     @Override
