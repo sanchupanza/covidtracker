@@ -20,9 +20,12 @@ import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityAllDataBinding;
 import com.sanchit.covidtracker.databinding.ActivityAllDataNewBinding;
+import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,7 +49,7 @@ public class AllDataActivity extends AppCompatActivity   {
 
         context = this;
         binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,true));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
 
         fetchAllData();
 
@@ -79,9 +82,11 @@ public class AllDataActivity extends AppCompatActivity   {
 
                         adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
                         binding.rvStatewise.setAdapter(adapter);
-                        dateWiseAdapter = new DateWiseAdapter(response.body().getCasesTimeSeries(),context);
+                        List<CasesTimeSeries> list = response.body().getCasesTimeSeries();
+                        Collections.reverse(list);
+                        dateWiseAdapter = new DateWiseAdapter(list,context);
                         binding.recyclerView.setAdapter(dateWiseAdapter);
-                        binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
+                       // binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
 
 
 
