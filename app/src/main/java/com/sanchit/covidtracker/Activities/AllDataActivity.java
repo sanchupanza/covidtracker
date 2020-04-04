@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityAllDataBinding;
+import com.sanchit.covidtracker.databinding.ActivityAllDataNewBinding;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 
@@ -24,7 +26,7 @@ import retrofit2.Response;
 public class AllDataActivity extends AppCompatActivity {
 
 
-    private ActivityAllDataBinding binding;
+    private ActivityAllDataNewBinding binding;
     private Context context;
     private StatewiseDataAdapter adapter;
 
@@ -32,7 +34,9 @@ public class AllDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_all_data);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_all_data_new);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         context = this;
         binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
         fetchAllData();
@@ -55,10 +59,10 @@ public class AllDataActivity extends AppCompatActivity {
                         binding.tvDCount.setText(String.valueOf(response.body().getStatewise().get(0).getDeaths()));
 
 
-                        binding.tvCDelCount.setText("[+"+ response.body().getStatewise().get(0).getDeltaconfirmed() +"]");
+                        binding.tvCDelCount.setText("+"+response.body().getStatewise().get(0).getDeltaconfirmed());
                    //     binding.tvADelCount.setText("[+"+ response.body().getStatewise().get(0).getDelta().getActive() +"]");
-                        binding.tvRDelCount.setText("[+"+ response.body().getStatewise().get(0).getDeltarecovered() +"]");
-                        binding.tvDDelCount.setText("[+"+ response.body().getStatewise().get(0).getDeltadeaths() +"]");
+                        binding.tvRDelCount.setText("+"+response.body().getStatewise().get(0).getDeltarecovered());
+                        binding.tvDDelCount.setText("+"+response.body().getStatewise().get(0).getDeltadeaths());
 
                         adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
                         binding.rvStatewise.setAdapter(adapter);
