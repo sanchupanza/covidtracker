@@ -46,9 +46,6 @@ public class DateWiseAdapter extends RecyclerView.Adapter<DateWiseAdapter.MyView
         }
         holder.binding.tvCount.setText(String.valueOf(list.get(position).getDailyconfirmed()));
         holder.binding.tvDate.setText(list.get(position).getDate());
-
-
-
     }
 
     @Override
