@@ -58,18 +58,56 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
-     //   binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
+        binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
 
         fetchAllData();
         animation();
 
+        binding.btnStatewise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                visbileStatewiseLayout();
+            }
+        });
+
+        binding.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                visbileHomeLayout();
+            }
+        });
 
 
 
 
+    }
+
+    private void visbileHomeLayout() {
 
 
+        binding.stateLayout.setVisibility(View.GONE);
+        binding.btnHome.setVisibility(View.GONE);
+
+        binding.recyclerView.setVisibility(View.VISIBLE);
+        binding.homeLayout.setVisibility(View.VISIBLE);
+        binding.marqueeText.setVisibility(View.VISIBLE);
+        binding.btnStatewise.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private void visbileStatewiseLayout() {
+
+        binding.recyclerView.setVisibility(View.GONE);
+        binding.homeLayout.setVisibility(View.GONE);
+        binding.marqueeText.setVisibility(View.GONE);
+        binding.btnStatewise.setVisibility(View.GONE);
+
+        binding.stateLayout.setVisibility(View.VISIBLE);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
 
@@ -114,8 +152,10 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         binding.tvDDelCount.setText("+"+response.body().getStatewise().get(0).getDeltadeaths());
 
                         statewiseList = response.body().getStatewise();
-                   //     adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
-                    //    binding.rvStatewise.setAdapter(adapter);
+                        adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
+                        binding.rvStatewise.setAdapter(adapter);
+                        binding.recyclerView.setItemViewCacheSize(response.body().getStatewise().size());
+
                         List<CasesTimeSeries> list = response.body().getCasesTimeSeries();
                         Collections.reverse(list);
                         dateList = list;
