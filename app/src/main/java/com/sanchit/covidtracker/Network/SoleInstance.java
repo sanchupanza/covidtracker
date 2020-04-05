@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SoleInstance {
 
     public static final String BASE_URL_SERVER = " https://api.covid19india.org/";
+    public static final String WORLD_BASE_URL = "https://api.covid19api.com/";
 
 
     private static volatile OkHttpClient okHttpClientInstance = null;
@@ -51,6 +52,34 @@ public class SoleInstance {
         }
         return apiServiceInstance;
     }
+
+    public static ApiService getWorldApiServiceInstance() {
+        if (apiServiceInstance == null) {
+            synchronized (SoleInstance.class) {
+                if (apiServiceInstance == null) {
+                    apiServiceInstance = getWorldRetrofitInstance().create(ApiService.class);
+                }
+            }
+        }
+        return apiServiceInstance;
+    }
+
+    public static Retrofit getWorldRetrofitInstance() {
+        if (retrofitInstance == null) {
+            synchronized (SoleInstance.class) {
+                if (retrofitInstance == null) {
+                    retrofitInstance = new Retrofit.Builder()
+                            .baseUrl(WORLD_BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create(getGsonInstance()))
+                            .client(getOkHttpClientInstance())
+                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return retrofitInstance;
+    }
+
 
     public static Retrofit getRetrofitInstance() {
         if (retrofitInstance == null) {

@@ -15,8 +15,10 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
@@ -36,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AllDataActivity extends AppCompatActivity   {
+public class AllDataActivity extends AppCompatActivity implements DateWiseAdapter.OnDateClickListener{
 
 
     private ActivityAllDataNewDesignBinding binding;
@@ -44,6 +46,8 @@ public class AllDataActivity extends AppCompatActivity   {
     private StatewiseDataAdapter adapter;
     private DateWiseAdapter dateWiseAdapter;
     Animation rotateAnimation;
+    private List<Statewise> statewiseList;
+    private  List<CasesTimeSeries> dateList;
 
 
 
@@ -61,10 +65,6 @@ public class AllDataActivity extends AppCompatActivity   {
         animation();
 
 
-        binding.marqueeText.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-        binding.marqueeText.setText("General Information... general information... General Information");
-        binding.marqueeText.setSelected(true);
-        binding.marqueeText.setSingleLine(true);
 
 
 
@@ -113,14 +113,19 @@ public class AllDataActivity extends AppCompatActivity   {
                         binding.tvRDelCount.setText("+"+response.body().getStatewise().get(0).getDeltarecovered());
                         binding.tvDDelCount.setText("+"+response.body().getStatewise().get(0).getDeltadeaths());
 
-                        adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
+                        statewiseList = response.body().getStatewise();
+                   //     adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
                     //    binding.rvStatewise.setAdapter(adapter);
                         List<CasesTimeSeries> list = response.body().getCasesTimeSeries();
                         Collections.reverse(list);
+                        dateList = list;
                         dateWiseAdapter = new DateWiseAdapter(list,context);
                         binding.recyclerView.setAdapter(dateWiseAdapter);
                         binding.recyclerView.setItemViewCacheSize(list.size());
                        // binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
+                        setMarqueeText(statewiseList);
+
+
 
 
 
@@ -145,9 +150,71 @@ public class AllDataActivity extends AppCompatActivity   {
 
     }
 
+    private void setMarqueeText(List<Statewise> statewiseList) {
+        StringBuilder builder = new StringBuilder();
+        for(int i=1; i<8; i++)
+        {
+            if(i==7)
+            {
+                String text = statewiseList.get(i).getState() + " - "+statewiseList.get(i).getConfirmed();
+                builder.append(text);
+            }else
+            {
+                if(i==1)
+                {
+                    String text = "\t\t\t"+statewiseList.get(i).getState() + " - "+statewiseList.get(i).getConfirmed()+",\t\t";
+                    builder.append(text);
+                }else
+                {
+                    String text = statewiseList.get(i).getState() + " - "+statewiseList.get(i).getConfirmed()+",\t\t";
+                    builder.append(text);
+                }
+
+            }
+        }
+        binding.marqueeText.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        binding.marqueeText.setText(builder.toString());
+        binding.marqueeText.setSelected(true);
+        binding.marqueeText.setSingleLine(true);
+
+
+
+    }
+
     private void sendDatatoStateWiseAdapter(List<Statewise> statewise) {
 
     }
 
 
+    @Override
+    public void onDateClick(int position) {
+  //      Toast.makeText(context, ""+position, Toast.LENGTH_SHORT).show();
+
+        MaterialDialog dateDialog = new MaterialDialog.Builder(context)
+                .autoDismiss(true)
+                .cancelable(true)
+                .canceledOnTouchOutside(true)
+                .customView(R.layout.dialog_layout, true)
+                .show();
+
+
+        final TextView tvDate = (TextView)dateDialog.findViewById(R.id.tv_date);
+        final TextView tvDailyConfirm = (TextView)dateDialog.findViewById(R.id.tv_d_c);
+        final TextView tvDailyRecoverd = (TextView)dateDialog.findViewById(R.id.tv_d_r);
+        final TextView tvDailyDeath = (TextView)dateDialog.findViewById(R.id.tv_d_d);
+        final TextView tvTotalConfirmed = (TextView)dateDialog.findViewById(R.id.tv_t_c);
+        final TextView tvTotalRecovered = (TextView)dateDialog.findViewById(R.id.tv_t_r);
+        final TextView tvTotalDeath = (TextView)dateDialog.findViewById(R.id.tv_t_d);
+
+
+        tvDate.setText("Date: "+dateList.get(position).getDate());
+        tvDailyConfirm.setText("Daily Confirmed: "+dateList.get(position).getDailyconfirmed());
+        tvDailyRecoverd.setText("Daily Recovered: "+dateList.get(position).getDailyrecovered());
+        tvDailyDeath.setText("Daily Deceased: "+dateList.get(position).getDailydeceased());
+        tvTotalConfirmed.setText("Total Confirmed: "+dateList.get(position).getTotalconfirmed());
+        tvTotalRecovered.setText("Total Recovered: "+dateList.get(position).getTotalrecovered());
+        tvTotalDeath.setText("Total Deceased: "+dateList.get(position).getTotaldeceased());
+
+
+    }
 }

@@ -29,4 +29,8 @@ public interface ApiService {
     Call<RawDataResponse> getRawData();
 
 
+    @GET("summary")
+    Call<RawDataResponse> getSummary();
+
+
 }
