@@ -13,21 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.SingleDatesLayoutBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
-import com.sanchit.covidtracker.response.AllData.DataResponse;
 
 import java.util.List;
 
-import retrofit2.Callback;
+
 
 public class DateWiseAdapter extends RecyclerView.Adapter<DateWiseAdapter.MyViewHolder> {
     private  List<CasesTimeSeries> list;
     private Context context;
-    private OnDateClickListener listener;
+
 
     public DateWiseAdapter(List<CasesTimeSeries> casesTimeSeries, Context context) {
         this.list = casesTimeSeries;
         this.context = context;
-        this.listener = listener;
+
 
     }
 
@@ -54,11 +53,8 @@ public class DateWiseAdapter extends RecyclerView.Adapter<DateWiseAdapter.MyView
         holder.binding.tvDate.setText(list.get(position).getDate());
 
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((OnDateClickListener)context).onDateClick(position);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            ((OnDateClickListener) context).onDateClick(position);
         });
     }
 

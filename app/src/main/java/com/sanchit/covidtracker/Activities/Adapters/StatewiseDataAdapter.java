@@ -1,7 +1,7 @@
 package com.sanchit.covidtracker.Activities.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +39,7 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
 
     @Override
     public void onBindViewHolder(@NonNull StatewiseDataAdapter.MyViewHolder holder, int position) {
-        if(position !=0)
-        {
+
             holder.binding.tvStateName.setText(list.get(position).getState());
             holder.binding.tvActive.setText(String.valueOf(list.get(position).getActive()));
       //      holder.binding.tvRecovered.setText(String.valueOf(list.get(position).getRecovered()));
@@ -85,17 +84,14 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
                 holder.binding.tvDeath.setText(list.get(position).getDeaths());
             }
 
-        }else
-        {
-//            holder.binding.tvConfirm.setText("C");
-//            holder.binding.tvActive.setText("A");
-//            holder.binding.tvRecovered.setText("R");
-//            holder.binding.tvDeath.setText("D");
-//
-//            holder.binding.tvStateName.setTextColor(Color.WHITE);
-//
-//            holder.itemView.setBackgroundColor(Color.RED);
-        }
+
+            if(position !=0)
+            {
+                holder.itemView.setOnClickListener(view -> {
+                    ((OnStateSelectListener)context).onStateSelect(list.get(position).getState().trim());
+                });
+            }
+
 
     }
 
@@ -104,7 +100,7 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder  {
 
         SingleStateRowBinding binding;
 
@@ -114,10 +110,11 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
 
         }
 
-        @Override
-        public void onClick(View view) {
+    }
 
-        }
+    public interface OnStateSelectListener
+    {
+        void onStateSelect(String stateName);
     }
 
 

@@ -1,5 +1,6 @@
 package com.sanchit.covidtracker.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
+import com.sanchit.covidtracker.Activities.Adapters.DistrictAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
@@ -29,7 +32,10 @@ import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
+import com.sanchit.covidtracker.response.DistrictwiseData.DistrictDatum;
+import com.sanchit.covidtracker.response.DistrictwiseData.DistrictWiseResponse;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AllDataActivity extends AppCompatActivity implements DateWiseAdapter.OnDateClickListener{
+public class AllDataActivity extends AppCompatActivity implements DateWiseAdapter.OnDateClickListener, StatewiseDataAdapter.OnStateSelectListener {
 
 
     private ActivityAllDataNewDesignBinding binding;
@@ -48,6 +54,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
     Animation rotateAnimation;
     private List<Statewise> statewiseList;
     private  List<CasesTimeSeries> dateList;
+    private List<DistrictWiseResponse> districsList;
 
 
 
@@ -63,26 +70,44 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
         fetchAllData();
         animation();
+        getDistrictwiseData();
 
-        binding.btnStatewise.setOnClickListener(new View.OnClickListener() {
+        binding.btnStatewise.setOnClickListener(view -> visbileStatewiseLayout());
+
+        binding.btnHome.setOnClickListener(view -> visbileHomeLayout());
+
+
+
+
+    }
+
+    private void getDistrictwiseData() {
+        Call<List<DistrictWiseResponse>> call = SoleInstance.getApiServiceInstance().getDataDistrictwise();
+
+        call.enqueue(new Callback<List<DistrictWiseResponse>>() {
             @Override
-            public void onClick(View view) {
+            public void onResponse(Call<List<DistrictWiseResponse>> call, Response<List<DistrictWiseResponse>> response) {
+                if(response!=null)
+                {
+                    if(response.body() !=null)
+                    {
+                      districsList = response.body();
+                    }else
+                    {
+                        Toast.makeText(AllDataActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                    }
 
-                visbileStatewiseLayout();
+                }else
+                {
+                    Toast.makeText(AllDataActivity.this, "null response", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DistrictWiseResponse>> call, Throwable t) {
+                Toast.makeText(AllDataActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        binding.btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                visbileHomeLayout();
-            }
-        });
-
-
-
-
     }
 
     private void visbileHomeLayout() {
@@ -108,6 +133,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
         binding.stateLayout.setVisibility(View.VISIBLE);
         binding.btnHome.setVisibility(View.VISIBLE);
+        fetchAllData();
     }
 
 
@@ -254,6 +280,55 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         tvTotalConfirmed.setText("Total Confirmed: "+dateList.get(position).getTotalconfirmed());
         tvTotalRecovered.setText("Total Recovered: "+dateList.get(position).getTotalrecovered());
         tvTotalDeath.setText("Total Deceased: "+dateList.get(position).getTotaldeceased());
+
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) -> finish())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
+    public void onStateSelect(String stateName) {
+
+        DistrictAdapter adapter;
+
+        List<DistrictDatum> selectedDistrictList = new ArrayList<>();
+        for(int i=0; i<districsList.size(); i++)
+        {
+            if(stateName.equals(districsList.get(i).getState()))
+            {
+                selectedDistrictList = districsList.get(i).getDistrictData();
+                break;
+            }
+        }
+
+
+        MaterialDialog districtDialog = new MaterialDialog.Builder(context)
+                .autoDismiss(true)
+                .cancelable(true)
+                .canceledOnTouchOutside(true)
+                .customView(R.layout.district_dialog_layout, true)
+                .show();
+
+        final TextView districtName = (TextView) districtDialog.findViewById(R.id.tv_district_name);
+        final RecyclerView recyclerView = (RecyclerView) districtDialog.findViewById(R.id.rv_districtList);
+
+        districtName.setText(stateName);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(districtDialog.getContext()));
+        adapter = new DistrictAdapter(districtDialog.getContext(),selectedDistrictList);
+        recyclerView.setAdapter(adapter);
+
+
 
 
     }

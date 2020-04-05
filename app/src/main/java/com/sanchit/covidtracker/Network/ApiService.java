@@ -1,10 +1,14 @@
 package com.sanchit.covidtracker.Network;
 
 import com.sanchit.covidtracker.response.AllData.DataResponse;
+import com.sanchit.covidtracker.response.DistrictwiseData.DistrictWiseResponse;
+import com.sanchit.covidtracker.response.WorldSummary.CountriesResponse;
 import com.sanchit.covidtracker.response.rawData.RawDataResponse;
-import com.sanchit.covidtracker.response.stateWise.StatewiseResponse;
+
 import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
 
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -17,8 +21,8 @@ public interface ApiService {
     Call<DataResponse> getAllData();
 
 
-    @GET("state_district_wise.json")
-    Call<StatewiseResponse> getDataDistrictwise();
+    @GET("v2/state_district_wise.json")
+    Call <List<DistrictWiseResponse>> getDataDistrictwise();
 
 
     @GET("travel_history.json")
@@ -30,7 +34,7 @@ public interface ApiService {
 
 
     @GET("summary")
-    Call<RawDataResponse> getSummary();
+    Call<CountriesResponse> getSummary();
 
 
 }

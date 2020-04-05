@@ -8,9 +8,7 @@ import android.widget.Toast;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.rawData.RawDataResponse;
-import com.sanchit.covidtracker.response.stateWise.Delhi;
-import com.sanchit.covidtracker.response.stateWise.Kerala;
-import com.sanchit.covidtracker.response.stateWise.StatewiseResponse;
+
 import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
 
 import retrofit2.Call;
@@ -112,37 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchStateWiseData() {
 
-        Call<StatewiseResponse> call = SoleInstance.getApiServiceInstance().getDataDistrictwise();
-
-        call.enqueue(new Callback<StatewiseResponse>() {
-            @Override
-            public void onResponse(Call<StatewiseResponse> call, Response<StatewiseResponse> response) {
-                if(response !=null)
-                {
-                    if(response.body() !=null)
-                    {
-                        Toast.makeText(MainActivity.this, ""+response.body().getDelhi().getDistrictData().getEastDelhi().getDelta().getConfirmed(), Toast.LENGTH_SHORT).show();
-                    }else
-                    {
-                        Toast.makeText(MainActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                }else
-                {
-                    Toast.makeText(MainActivity.this, "null response", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StatewiseResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-    }
 
     private void fetchAllData() {
         Call<DataResponse> call = SoleInstance.getApiServiceInstance().getAllData();

@@ -9,9 +9,11 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SoleInstance {
 
-    public static final String BASE_URL_SERVER = " https://api.covid19india.org/";
+
+public class WorldSoleInstance {
+
+    public static final String BASE_URL_SERVER = "https://api.covid19api.com/";
 
 
 
@@ -28,7 +30,7 @@ public class SoleInstance {
 
 
 
-    private SoleInstance() {
+    private WorldSoleInstance() {
         if (okHttpClientInstance != null) {
             throw new RuntimeException("Can not create this way, please use getOkHttpClientInstance method");
         } else if (stethoInterceptorInstance != null) {
@@ -113,6 +115,4 @@ public class SoleInstance {
         }
         return stethoInterceptorInstance;
     }
-
-
 }
