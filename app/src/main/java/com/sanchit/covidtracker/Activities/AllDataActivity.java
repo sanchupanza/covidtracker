@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -53,12 +54,17 @@ public class AllDataActivity extends AppCompatActivity   {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
-        binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
+     //   binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
 
         fetchAllData();
         animation();
 
+
+        binding.marqueeText.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        binding.marqueeText.setText("General Information... general information... General Information");
+        binding.marqueeText.setSelected(true);
+        binding.marqueeText.setSingleLine(true);
 
 
 
@@ -108,7 +114,7 @@ public class AllDataActivity extends AppCompatActivity   {
                         binding.tvDDelCount.setText("+"+response.body().getStatewise().get(0).getDeltadeaths());
 
                         adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
-                        binding.rvStatewise.setAdapter(adapter);
+                    //    binding.rvStatewise.setAdapter(adapter);
                         List<CasesTimeSeries> list = response.body().getCasesTimeSeries();
                         Collections.reverse(list);
                         dateWiseAdapter = new DateWiseAdapter(list,context);
