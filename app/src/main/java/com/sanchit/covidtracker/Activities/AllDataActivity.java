@@ -11,6 +11,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityAllDataBinding;
 import com.sanchit.covidtracker.databinding.ActivityAllDataNewBinding;
+import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
@@ -35,16 +38,18 @@ import retrofit2.Response;
 public class AllDataActivity extends AppCompatActivity   {
 
 
-    private ActivityAllDataNewBinding binding;
+    private ActivityAllDataNewDesignBinding binding;
     private Context context;
     private StatewiseDataAdapter adapter;
     private DateWiseAdapter dateWiseAdapter;
+    Animation rotateAnimation;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_all_data_new);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_all_data_new_design);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
@@ -52,7 +57,29 @@ public class AllDataActivity extends AppCompatActivity   {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
 
         fetchAllData();
+        animation();
 
+
+
+
+
+
+    }
+
+
+    private void animation()
+    {
+        rotateAnimation= AnimationUtils.loadAnimation(this,R.anim.rotate);
+        binding.image1.startAnimation(rotateAnimation);
+
+        rotateAnimation= AnimationUtils.loadAnimation(this,R.anim.reverse_rotate);
+        binding.image2.startAnimation(rotateAnimation);
+
+        rotateAnimation= AnimationUtils.loadAnimation(this,R.anim.reverse_rotate);
+        binding.image3.startAnimation(rotateAnimation);
+
+        rotateAnimation= AnimationUtils.loadAnimation(this,R.anim.reverse_rotate);
+        binding.image4.startAnimation(rotateAnimation);
 
 
 
@@ -86,6 +113,7 @@ public class AllDataActivity extends AppCompatActivity   {
                         Collections.reverse(list);
                         dateWiseAdapter = new DateWiseAdapter(list,context);
                         binding.recyclerView.setAdapter(dateWiseAdapter);
+                        binding.recyclerView.setItemViewCacheSize(list.size());
                        // binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
 
 
