@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.DistrictAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
+import com.sanchit.covidtracker.MainActivity;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityAllDataBinding;
@@ -34,6 +36,7 @@ import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 import com.sanchit.covidtracker.response.DistrictwiseData.DistrictDatum;
 import com.sanchit.covidtracker.response.DistrictwiseData.DistrictWiseResponse;
+import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,7 +47,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AllDataActivity extends AppCompatActivity implements DateWiseAdapter.OnDateClickListener, StatewiseDataAdapter.OnStateSelectListener {
+public class AllDataActivity extends AppCompatActivity implements DateWiseAdapter.OnDateClickListener,
+        StatewiseDataAdapter.OnStateSelectListener {
 
 
     private ActivityAllDataNewDesignBinding binding;
@@ -71,14 +75,52 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         fetchAllData();
         animation();
         getDistrictwiseData();
+        fetchTravelHistory();
 
-        binding.btnStatewise.setOnClickListener(view -> visbileStatewiseLayout());
+        binding.btnStatewise.setOnClickListener(v -> visbileStatewiseLayout());
 
-        binding.btnHome.setOnClickListener(view -> visbileHomeLayout());
+        binding.btnHome.setOnClickListener(v -> visbileHomeLayout());
+
+        binding.imageView.setOnClickListener(v ->openGraphsActivity());
 
 
 
 
+    }
+
+    private void fetchTravelHistory() {
+        Call<TravelHistoryResponse> call  = SoleInstance.getApiServiceInstance().getTravelHistory();
+
+        call.enqueue(new Callback<TravelHistoryResponse>() {
+            @Override
+            public void onResponse(Call<TravelHistoryResponse> call, Response<TravelHistoryResponse> response) {
+                if(response !=null)
+                {
+                    if(response.body() !=null)
+                    {
+                        Toast.makeText(context, ""+response.body().getTravelHistory().size(), Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        Toast.makeText(context, ""+response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }else
+                {
+                    Toast.makeText(context, "null response", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TravelHistoryResponse> call, Throwable t) {
+
+                Toast.makeText(context, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void openGraphsActivity() {
+        Intent intent  = new Intent(context,WorldDataActivity.class);
+        startActivity(intent);
     }
 
     private void getDistrictwiseData() {
@@ -178,9 +220,10 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         binding.tvDDelCount.setText("+"+response.body().getStatewise().get(0).getDeltadeaths());
 
                         statewiseList = response.body().getStatewise();
-                        adapter = new StatewiseDataAdapter(response.body().getStatewise(),context);
+                        statewiseList.remove(0);
+                        adapter = new StatewiseDataAdapter(statewiseList,context);
                         binding.rvStatewise.setAdapter(adapter);
-                        binding.recyclerView.setItemViewCacheSize(response.body().getStatewise().size());
+                        binding.recyclerView.setItemViewCacheSize(statewiseList.size());
 
                         List<CasesTimeSeries> list = response.body().getCasesTimeSeries();
                         Collections.reverse(list);

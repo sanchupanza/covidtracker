@@ -38,7 +38,7 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.MyView
         holder.binding.tvConfirmCount.setText(String.valueOf(list.get(position).getConfirmed()));
         if(list.get(position).getDelta().getConfirmed() !=0)
         {
-            holder.binding.tvDeltaCount.setText("[+"+list.get(position).getDelta().getConfirmed());
+            holder.binding.tvDeltaCount.setText("[+"+list.get(position).getDelta().getConfirmed()+"]");
         }
 
     }

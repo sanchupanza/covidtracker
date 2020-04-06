@@ -85,12 +85,8 @@ public class StatewiseDataAdapter extends RecyclerView.Adapter<StatewiseDataAdap
             }
 
 
-            if(position !=0)
-            {
-                holder.itemView.setOnClickListener(view -> {
-                    ((OnStateSelectListener)context).onStateSelect(list.get(position).getState().trim());
-                });
-            }
+
+        holder.itemView.setOnClickListener(view -> ((OnStateSelectListener)context).onStateSelect(list.get(position).getState().trim()));
 
 
     }
