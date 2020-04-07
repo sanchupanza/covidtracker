@@ -5,6 +5,10 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.sanchit.covidtracker.Network.SoleInstance;
@@ -21,12 +25,28 @@ public class WorldDataActivity extends AppCompatActivity {
 
     private ActivityWorldDataBinding binding;
     private Context context;
+    private Animation rotateAnimation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_world_data);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         context = this;
       //  getData();
+
+
+        rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        binding.imgVirus.startAnimation(rotateAnimation);
+
+
+        binding.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
 
