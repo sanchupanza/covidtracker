@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.WorldDataActivity"></activity>
+        <activity android:name=".Activities.GraphsActivity"></activity>
+        <activity android:name=".Activities.WorldDataActivity" />
         <activity android:name=".Activities.CalenderActivity" />
         <activity android:name=".Activities.AllDataActivity">
             <intent-filter>

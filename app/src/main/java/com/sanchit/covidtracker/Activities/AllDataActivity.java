@@ -66,13 +66,13 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         fetchAllData();
         animation();
         getDistrictwiseData();
-        fetchTravelHistory();
+
 
         binding.btnStatewise.setOnClickListener(v -> visbileStatewiseLayout());
 
         binding.btnHome.setOnClickListener(v -> visbileHomeLayout());
 
-        binding.imageView.setOnClickListener(v -> openGraphsActivity());
+        binding.btnMap.setOnClickListener(v -> openGraphsActivity());
 
 
     }
@@ -104,7 +104,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
     }
 
     private void openGraphsActivity() {
-        Intent intent = new Intent(context, WorldDataActivity.class);
+        Intent intent = new Intent(context, GraphsActivity.class);
         startActivity(intent);
     }
 
