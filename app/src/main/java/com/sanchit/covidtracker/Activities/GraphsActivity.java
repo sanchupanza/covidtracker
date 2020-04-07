@@ -125,6 +125,14 @@ public class GraphsActivity extends AppCompatActivity {
 
                         statewiseList = response.body().getStatewise();
                         dateList = response.body().getCasesTimeSeries();
+
+                        for(int i=0; i<dateList.size();i++)
+                        {
+                            if(dateList.size()!=30)
+                            {
+                                dateList.remove(i);
+                            }
+                        }
                         statewiseList.remove(0);
 
                         prepareList();
@@ -207,6 +215,7 @@ public class GraphsActivity extends AppCompatActivity {
         LineDataSet dataSet1 = new LineDataSet(lineEntries,"Dates");
 
         LineData lineData = new LineData(dates,dataSet1);
+        binding.lineChart.setMinimumWidth(100);
         binding.lineChart.setData(lineData);
         binding.lineChart.setTouchEnabled(true);
         binding.lineChart.setDragEnabled(true);
