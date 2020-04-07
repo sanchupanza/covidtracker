@@ -15,19 +15,19 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/nav_btn" />
+            app:srcCompat="@drawable/wordl" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:text="INDIA COVID-19 TRACKER"
             android:textColor="#FFF"
             android:textSize="20sp"
@@ -39,13 +39,13 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="LAST UPDATED 34 MINUTES AGO04 APR, 20:06 IST"
             android:textColor="#FFF"
             android:textSize="10sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -523,7 +523,7 @@
             android:layout_height="60dp"
             android:layout_margin="10dp"
             android:background="@drawable/btn_bg"
-            android:text="Graphs"
+            android:text="Graph Analysis"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="18sp"

@@ -26,7 +26,7 @@ public class WorldDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_world_data);
         context = this;
-        getData();
+      //  getData();
     }
 
 
