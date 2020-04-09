@@ -17,7 +17,6 @@
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/br_chart"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginStart="10dp"

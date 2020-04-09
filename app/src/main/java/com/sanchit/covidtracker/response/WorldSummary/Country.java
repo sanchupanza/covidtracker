@@ -3,7 +3,7 @@ package com.sanchit.covidtracker.response.WorldSummary;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Country {
+public class Country implements Comparable<Country>{
 
     @SerializedName("Country")
     @Expose
@@ -116,4 +116,8 @@ public class Country {
         this.date = date;
     }
 
+    @Override
+    public int compareTo(Country country) {
+        return (this.getTotalConfirmed().compareTo(country.getTotalConfirmed()));
+    }
 }

@@ -215,6 +215,7 @@
             android:id="@+id/rvcontry"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            tools:listitem="@layout/single_country_layout"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"

@@ -74,7 +74,13 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
         binding.btnMap.setOnClickListener(v -> openGraphsActivity());
 
+        binding.imageView.setOnClickListener(view -> openWorldDataActivity());
 
+
+    }
+
+    private void openWorldDataActivity() {
+        startActivity(new Intent(context,WorldDataActivity.class));
     }
 
     private void fetchTravelHistory() {

@@ -16,6 +16,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
@@ -177,12 +178,31 @@ public class GraphsActivity extends AppCompatActivity {
 
     private void setDataToPie() {
 
+
+
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+
         ArrayList<Entry> pieEntries = new ArrayList<>();
 
         for(int i = 0; i<stateValues.size(); i++)
         {
             pieEntries.add(new Entry(stateValues.get(i),i));
+            barEntries.add(new BarEntry(stateValues.get(i),i));
         }
+
+        BarDataSet dataSet = new BarDataSet(barEntries,"States");
+
+        BarData barData = new BarData(states,dataSet);
+        binding.brChart.setData(barData);
+        binding.brChart.setMinimumWidth(10);
+        binding.brChart.setTouchEnabled(true);
+        binding.brChart.setDragEnabled(true);
+        binding.brChart.setScaleEnabled(true);
+        binding.brChart.animateX(1000);
+
+
 
         PieDataSet set = new PieDataSet(pieEntries, "States" );
 
@@ -213,6 +233,11 @@ public class GraphsActivity extends AppCompatActivity {
 
 
         LineDataSet dataSet1 = new LineDataSet(lineEntries,"Dates");
+/*
+
+        ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
+        lineDataSets.add(dataSet1);
+*/
 
         LineData lineData = new LineData(dates,dataSet1);
         binding.lineChart.setMinimumWidth(100);
