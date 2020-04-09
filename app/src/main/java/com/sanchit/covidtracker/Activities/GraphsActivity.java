@@ -15,10 +15,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
-import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityGraphsBinding;
@@ -27,7 +24,6 @@ import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -132,7 +128,9 @@ public class GraphsActivity extends AppCompatActivity {
                             if(dateList.size()!=30)
                             {
                                 dateList.remove(i);
+                                i--;
                             }
+
                         }
                         statewiseList.remove(0);
 
@@ -239,9 +237,15 @@ public class GraphsActivity extends AppCompatActivity {
         lineDataSets.add(dataSet1);
 */
 
+        ViewPortHandler viewPortHandler = binding.lineChart.getViewPortHandler();
+        float scaleX = viewPortHandler.getScaleX();
+        float scaleY = viewPortHandler.getScaleY();
         LineData lineData = new LineData(dates,dataSet1);
-        binding.lineChart.setMinimumWidth(100);
+        binding.lineChart.setVisibleXRangeMaximum(10);
+        binding.lineChart.moveViewToX(30);
+        binding.lineChart.invalidate();
         binding.lineChart.setData(lineData);
+        binding.lineChart.setMinimumWidth(5000);
         binding.lineChart.setTouchEnabled(true);
         binding.lineChart.setDragEnabled(true);
         binding.lineChart.requestFocus();

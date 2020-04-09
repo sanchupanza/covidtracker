@@ -1,4 +1,4 @@
-package com.sanchit.covidtracker.Activities.Adapters;
+package com.sanchit.covidtracker.Adapters;
 
 import android.content.Context;
 

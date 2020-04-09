@@ -18,21 +18,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.sanchit.covidtracker.Activities.Adapters.DateWiseAdapter;
-import com.sanchit.covidtracker.Activities.Adapters.DistrictAdapter;
-import com.sanchit.covidtracker.Activities.Adapters.StatewiseDataAdapter;
+import com.sanchit.covidtracker.Adapters.DateWiseAdapter;
+import com.sanchit.covidtracker.Adapters.DistrictAdapter;
+import com.sanchit.covidtracker.Adapters.StatewiseDataAdapter;
+import com.sanchit.covidtracker.Adapters.UpdateAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
+import com.sanchit.covidtracker.Utils.Constants;
 import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 import com.sanchit.covidtracker.response.DistrictwiseData.DistrictDatum;
 import com.sanchit.covidtracker.response.DistrictwiseData.DistrictWiseResponse;
-import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
+import com.sanchit.covidtracker.response.UpdatesResponse;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,6 +59,8 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
     private List<Statewise> statewiseList;
     private List<CasesTimeSeries> dateList;
     private List<DistrictWiseResponse> districsList;
+    private List<UpdatesResponse> updateList;
+    private String lastUpdateTime;
 
 
     @Override
@@ -62,10 +72,12 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         context = this;
         binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.rvUpdates.setLayoutManager(new LinearLayoutManager(this));
 
         fetchAllData();
         animation();
         getDistrictwiseData();
+        getUpdates();
 
 
         binding.btnStatewise.setOnClickListener(v -> visbileStatewiseLayout());
@@ -77,37 +89,61 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         binding.imageView.setOnClickListener(view -> openWorldDataActivity());
 
 
+
+
+
+       /* Long time = 1586443445L;
+       // String date = Constants.getTime(time);
+
+        String timesAgo = Constants.getTimeAgo(time);
+        Toast.makeText(context, ""+timesAgo, Toast.LENGTH_SHORT).show();*/
+
+
+
+
+
     }
+
+    private void getUpdates() {
+
+        Call<List<UpdatesResponse>> call = SoleInstance.getApiServiceInstance().getUpdates();
+
+        call.enqueue(new Callback<List<UpdatesResponse>>() {
+            @Override
+            public void onResponse(Call<List<UpdatesResponse>> call, Response<List<UpdatesResponse>> response) {
+                if(response.body() !=null)
+                {
+                    if(response.body().size() > 0)
+                    {
+                        updateList = response.body();
+                        Collections.reverse(updateList);
+                        UpdateAdapter adapter = new UpdateAdapter(updateList,context);
+                        binding.rvUpdates.setAdapter(adapter);
+                    }else
+                    {
+                        Toast.makeText(AllDataActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                    }
+                }else
+                {
+                    Toast.makeText(AllDataActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UpdatesResponse>> call, Throwable t) {
+                Toast.makeText(AllDataActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     private void openWorldDataActivity() {
         startActivity(new Intent(context,WorldDataActivity.class));
     }
 
-    private void fetchTravelHistory() {
-        Call<TravelHistoryResponse> call = SoleInstance.getApiServiceInstance().getTravelHistory();
 
-        call.enqueue(new Callback<TravelHistoryResponse>() {
-            @Override
-            public void onResponse(Call<TravelHistoryResponse> call, Response<TravelHistoryResponse> response) {
-                if (response != null) {
-                    if (response.body() != null) {
-                      //  Toast.makeText(context, "" + response.body().getTravelHistory().size(), Toast.LENGTH_SHORT).show();
-                    } else {
-                     //   Toast.makeText(context, "" + response.message(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(context, "null response", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<TravelHistoryResponse> call, Throwable t) {
-
-                Toast.makeText(context, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
 
     private void openGraphsActivity() {
         Intent intent = new Intent(context, GraphsActivity.class);
@@ -191,6 +227,21 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
                 if (response != null) {
                     if (response.body() != null) {
+
+                        lastUpdateTime  = response.body().getStatewise().get(0).getLastupdatedtime();
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        Date date = null;
+                        try {
+                            date = sdf.parse(lastUpdateTime);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        PrettyTime p = new PrettyTime();
+                        String timeAgo = p.format(date);
+                        binding.textView2.setText("LAST UPDATED "+timeAgo.toUpperCase());
+
                         binding.tvCCount.setText(String.valueOf(response.body().getStatewise().get(0).getConfirmed()));
                         binding.tvACount.setText(String.valueOf(response.body().getStatewise().get(0).getActive()));
                         binding.tvRCount.setText(String.valueOf(response.body().getStatewise().get(0).getRecovered()));
@@ -203,6 +254,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         binding.tvDDelCount.setText("+" + response.body().getStatewise().get(0).getDeltadeaths());
 
                         statewiseList = response.body().getStatewise();
+                        setMarqueeText(statewiseList);
                         statewiseList.remove(0);
                         adapter = new StatewiseDataAdapter(statewiseList, context);
                         binding.rvStatewise.setAdapter(adapter);
@@ -215,7 +267,6 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         binding.recyclerView.setAdapter(dateWiseAdapter);
                         binding.recyclerView.setItemViewCacheSize(list.size());
                         // binding.recyclerView.scrollToPosition((response.body().getCasesTimeSeries().size()-1));
-                        setMarqueeText(statewiseList);
 
 
                     } else {
@@ -260,9 +311,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
     }
 
-    private void sendDatatoStateWiseAdapter(List<Statewise> statewise) {
 
-    }
 
 
     @Override

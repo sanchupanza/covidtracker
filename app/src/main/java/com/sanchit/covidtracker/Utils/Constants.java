@@ -11,6 +11,10 @@ import androidx.core.content.ContextCompat;
 
 import com.sanchit.covidtracker.ApplicationClass.CovidTrackerApp;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Date;
+
 public class Constants {
     public static final String NF = "NF";
     public static final String SUCCESS = "success";
@@ -51,6 +55,13 @@ public class Constants {
 
     }
 
+
+    public static String getTime(long timeStamp)
+    {
+        String date = new java.text.SimpleDateFormat("dd-MM-yyyy hh:mm aa").format(new java.util.Date (timeStamp*1000));
+        return date;
+    }
+
     private static int darkenColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
@@ -73,5 +84,11 @@ public class Constants {
         }
 
         return index;
+    }
+
+    public static String getTimeAgo(Long time) {
+        PrettyTime p = new PrettyTime();
+        String newDate = p.format(new Date(time *1000));
+        return  newDate;
     }
 }

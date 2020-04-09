@@ -6,22 +6,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import com.sanchit.covidtracker.Activities.Adapters.CountryAdapter;
-import com.sanchit.covidtracker.Network.SoleInstance;
+import com.sanchit.covidtracker.Adapters.CountryAdapter;
 import com.sanchit.covidtracker.Network.WorldSoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityWorldDataBinding;
 import com.sanchit.covidtracker.response.WorldSummary.CountriesResponse;
 import com.sanchit.covidtracker.response.WorldSummary.Country;
 
-import java.sql.Connection;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

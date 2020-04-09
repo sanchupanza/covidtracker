@@ -49,13 +49,14 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
+
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="90dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -262,6 +263,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout8"
                 android:layout_width="170dp"
                 android:layout_height="170dp"
                 android:layout_marginTop="10dp"
@@ -334,6 +336,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5"
                 app:srcCompat="@drawable/stayhomelogo" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_updates"
+                android:layout_width="0dp"
+                tools:listitem="@layout/single_update_layout"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
