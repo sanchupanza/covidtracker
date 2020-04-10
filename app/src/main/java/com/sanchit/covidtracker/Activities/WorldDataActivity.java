@@ -89,11 +89,10 @@ public class WorldDataActivity extends AppCompatActivity {
                         binding.rvcontry.setItemViewCacheSize(countryList.size());
 
 
+                        binding.textView2.setText("Last Updated "+Constants.getTimesAgo(date)+", "+date);
 
-                        binding.textView2.setText("Last Updated "+Constants.getTimesAgo(date)+" "+date);
 
-
-                        setData();
+                     //   setData();
                       //  Toast.makeText(WorldDataActivity.this, ""+response.body().getCountries().size(), Toast.LENGTH_SHORT).show();
 
                     }else
@@ -113,7 +112,4 @@ public class WorldDataActivity extends AppCompatActivity {
         });
     }
 
-    private void setData() {
-        Toast.makeText(context, ""+ Constants.getTimesAgo(date), Toast.LENGTH_SHORT).show();
-    }
 }

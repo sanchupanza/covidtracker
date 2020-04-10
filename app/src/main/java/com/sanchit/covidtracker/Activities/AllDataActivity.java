@@ -228,23 +228,9 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                 if (response != null) {
                     if (response.body() != null) {
 
-                        lastUpdateTime  = response.body().getStatewise().get(0).getLastupdatedtime();
+                        lastUpdateTime  = response.body().getStatewise().get(0).getLastupdatedtime().trim();
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                        Date date = null;
-                        try {
-                            date = sdf.parse(lastUpdateTime);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-
-
-
-
-                        binding.textView2.setText("LAST UPDATED "+Constants.getTimesAgo(lastUpdateTime).toUpperCase()+" "+lastUpdateTime);
+                        binding.textView2.setText("LAST UPDATED "+Constants.getTimesAgo(lastUpdateTime).toUpperCase()+", "+lastUpdateTime);
 
                         binding.tvCCount.setText(String.valueOf(response.body().getStatewise().get(0).getConfirmed()));
                         binding.tvACount.setText(String.valueOf(response.body().getStatewise().get(0).getActive()));
