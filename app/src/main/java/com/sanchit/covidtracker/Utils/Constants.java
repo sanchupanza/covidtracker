@@ -13,6 +13,9 @@ import com.sanchit.covidtracker.ApplicationClass.CovidTrackerApp;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Constants {
@@ -86,9 +89,50 @@ public class Constants {
         return index;
     }
 
-    public static String getTimeAgo(Long time) {
+
+
+    public static String getTimesAgo(String time)
+    {
+        String timeAgo = null;
+        PrettyTime p = new PrettyTime();
+        if(time.contains("Z"))
+        {
+            Date date = null;
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+            try {
+                date = dateFormat.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            timeAgo = p.format(date);
+        }else if(time.contains(":"))
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = null;
+            try {
+                date = sdf.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            timeAgo = p.format(date);
+        }else
+        {
+            Long milis = Long.parseLong(time);
+            timeAgo = p.format(new Date(milis * 1000));
+        }
+
+        return timeAgo;
+    }
+
+    public static String getTimeAgofromMillis(Long time) {
         PrettyTime p = new PrettyTime();
         String newDate = p.format(new Date(time *1000));
         return  newDate;
+    }
+
+    public static String getTimeAgoFromDate(Date date) {
+        PrettyTime p = new PrettyTime();
+        String timeAgo = p.format(date);
+        return timeAgo;
     }
 }

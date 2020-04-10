@@ -95,7 +95,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
        /* Long time = 1586443445L;
        // String date = Constants.getTime(time);
 
-        String timesAgo = Constants.getTimeAgo(time);
+        String timesAgo = Constants.getTimeAgofromMillis(time);
         Toast.makeText(context, ""+timesAgo, Toast.LENGTH_SHORT).show();*/
 
 
@@ -238,9 +238,13 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                             e.printStackTrace();
                         }
 
-                        PrettyTime p = new PrettyTime();
-                        String timeAgo = p.format(date);
-                        binding.textView2.setText("LAST UPDATED "+timeAgo.toUpperCase());
+
+
+
+
+
+
+                        binding.textView2.setText("LAST UPDATED "+Constants.getTimesAgo(lastUpdateTime).toUpperCase()+" "+lastUpdateTime);
 
                         binding.tvCCount.setText(String.valueOf(response.body().getStatewise().get(0).getConfirmed()));
                         binding.tvACount.setText(String.valueOf(response.body().getStatewise().get(0).getActive()));

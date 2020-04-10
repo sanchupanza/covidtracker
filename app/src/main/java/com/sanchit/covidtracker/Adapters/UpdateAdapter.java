@@ -2,7 +2,6 @@ package com.sanchit.covidtracker.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -36,8 +35,8 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull UpdateAdapter.MyViewHolder holder, int position) {
         holder.binding.tvUpdate.setText(list.get(position).getUpdate());
-        holder.binding.tvTimeAgo.setText(Constants.getTimeAgo(Long.parseLong(String.valueOf(list.get(position).getTimestamp()))));
 
+        holder.binding.tvTimeAgo.setText(Constants.getTimesAgo(String.valueOf(list.get(position).getTimestamp())));
     }
 
     @Override

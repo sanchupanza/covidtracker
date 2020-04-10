@@ -14,11 +14,15 @@ import android.widget.Toast;
 import com.sanchit.covidtracker.Adapters.CountryAdapter;
 import com.sanchit.covidtracker.Network.WorldSoleInstance;
 import com.sanchit.covidtracker.R;
+import com.sanchit.covidtracker.Utils.Constants;
 import com.sanchit.covidtracker.databinding.ActivityWorldDataBinding;
 import com.sanchit.covidtracker.response.WorldSummary.CountriesResponse;
 import com.sanchit.covidtracker.response.WorldSummary.Country;
 
+import org.joda.time.Instant;
+
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,6 +37,7 @@ public class WorldDataActivity extends AppCompatActivity {
     private String date;
     private List<Country> countryList;
     private CountryAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +88,11 @@ public class WorldDataActivity extends AppCompatActivity {
                         binding.rvcontry.setAdapter(adapter);
                         binding.rvcontry.setItemViewCacheSize(countryList.size());
 
+
+
+                        binding.textView2.setText("Last Updated "+Constants.getTimesAgo(date)+" "+date);
+
+
                         setData();
                       //  Toast.makeText(WorldDataActivity.this, ""+response.body().getCountries().size(), Toast.LENGTH_SHORT).show();
 
@@ -104,5 +114,6 @@ public class WorldDataActivity extends AppCompatActivity {
     }
 
     private void setData() {
+        Toast.makeText(context, ""+ Constants.getTimesAgo(date), Toast.LENGTH_SHORT).show();
     }
 }
