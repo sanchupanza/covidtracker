@@ -23,7 +23,7 @@ import retrofit2.Callback;
 public class WebBannerAdapter extends RecyclerView.Adapter<WebBannerAdapter.MzViewHolder> {
 
     private Context context;
-    private List<String> urlList;
+  //  private List<String> urlList;
     List<UpdatesResponse> updateList;
     private BannerLayout.OnBannerItemClickListener onBannerItemClickListener;
 
@@ -34,7 +34,7 @@ public class WebBannerAdapter extends RecyclerView.Adapter<WebBannerAdapter.MzVi
 
     public WebBannerAdapter(Context context, List<UpdatesResponse> updateList) {
         this.context = context;
-        this.updateList=updateList;
+        this.updateList = updateList;
     }
 
     @NonNull
@@ -43,7 +43,7 @@ public class WebBannerAdapter extends RecyclerView.Adapter<WebBannerAdapter.MzVi
 
 
       //  SingleUpdateLayoutBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.single_update_layout,parent,false);
-        return new MzViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.single_update_layout, parent, false));
+        return new MzViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.single_test_layout, parent, false));
 
     }
 
@@ -52,8 +52,9 @@ public class WebBannerAdapter extends RecyclerView.Adapter<WebBannerAdapter.MzVi
 
 
         holder.tvUpdate.setText(updateList.get(position).getUpdate());
-        holder.timeago.setText(String.valueOf(updateList.get(position).getTimestamp()));
-       /* if (urlList == null || urlList.isEmpty())
+        holder.timeago.setText( "3 minutes ago");
+
+     /*   if (urlList == null || urlList.isEmpty())
             return;
         final int P = position % urlList.size();
         String url = urlList.get(P);
@@ -67,16 +68,16 @@ public class WebBannerAdapter extends RecyclerView.Adapter<WebBannerAdapter.MzVi
                 }
 
             }
-        });
-*/
+        });*/
     }
 
     @Override
     public int getItemCount() {
-        if (updateList != null) {
-            return updateList.size();
+       /* if (urlList != null) {
+            return urlList.size();
         }
-        return 0;
+        return 0;*/
+       return updateList.size();
     }
 
     public class MzViewHolder extends RecyclerView.ViewHolder {

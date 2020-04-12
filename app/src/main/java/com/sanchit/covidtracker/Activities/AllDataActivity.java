@@ -60,7 +60,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
     private Context context;
     private StatewiseDataAdapter adapter;
     private DateWiseAdapter dateWiseAdapter;
-    Animation rotateAnimation;
+    private Animation rotateAnimation;
     private List<Statewise> statewiseList;
     private List<CasesTimeSeries> dateList;
     private List<DistrictWiseResponse> districsList;
@@ -123,7 +123,9 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         updateList = response.body();
                         Collections.reverse(updateList);
                         UpdateAdapter adapter = new UpdateAdapter(updateList,context);
+                        binding.recycler.setShowIndicator(false);
                         binding.recycler.setAdapter(adapter);
+                        binding.recycler.setAutoPlaying(true);
                     }else
                     {
                         Toast.makeText(AllDataActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
@@ -185,7 +187,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
         binding.stateLayout.setVisibility(View.GONE);
         binding.btnHome.setVisibility(View.GONE);
-        binding.recyclerView.setVisibility(View.VISIBLE);
+       // binding.recyclerView.setVisibility(View.VISIBLE);
         binding.homeLayout.setVisibility(View.VISIBLE);
         binding.marqueeText.setVisibility(View.VISIBLE);
         binding.btnStatewise.setVisibility(View.VISIBLE);

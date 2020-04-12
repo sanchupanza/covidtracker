@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.sanchit.covidtracker.Adapters.CountryAdapter;
 import com.sanchit.covidtracker.Network.WorldSoleInstance;
 import com.sanchit.covidtracker.R;
@@ -21,6 +22,7 @@ import com.sanchit.covidtracker.response.WorldSummary.Country;
 
 import org.joda.time.Instant;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ public class WorldDataActivity extends AppCompatActivity {
     private String date;
     private List<Country> countryList;
     private CountryAdapter adapter;
+    private TinyDB tinydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class WorldDataActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
+        tinydb = new TinyDB(context);
         getData();
 
 
@@ -84,6 +88,14 @@ public class WorldDataActivity extends AppCompatActivity {
                         countryList.remove(0);
                         Collections.sort(countryList,Country::compareTo);
                         Collections.reverse(countryList);
+                        tinydb.putString("json",new Gson().toJson(countryList));
+                        tinydb.putString("tc",String.valueOf(response.body().getGlobal().getTotalConfirmed()));
+                        tinydb.putString("nc",String.valueOf(response.body().getGlobal().getNewConfirmed()));
+                        tinydb.putString("tr",String.valueOf(response.body().getGlobal().getTotalRecovered()));
+                        tinydb.putString("nr",String.valueOf(response.body().getGlobal().getNewRecovered()));
+                        tinydb.putString("td",String.valueOf(response.body().getGlobal().getTotalDeaths()));
+                        tinydb.putString("nd",String.valueOf(response.body().getGlobal().getNewDeaths()));
+                        tinydb.putString("date",date);
                         adapter  = new CountryAdapter(context,countryList);
                         binding.rvcontry.setAdapter(adapter);
                         binding.rvcontry.setItemViewCacheSize(countryList.size());
@@ -95,18 +107,46 @@ public class WorldDataActivity extends AppCompatActivity {
                     }else
                     {
                         Toast.makeText(WorldDataActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                        showOfflineData();
+
                     }
                 }else
                 {
+
                     Toast.makeText(WorldDataActivity.this, "null response", Toast.LENGTH_SHORT).show();
+                    showOfflineData();
+
                 }
             }
 
             @Override
             public void onFailure(Call<CountriesResponse> call, Throwable t) {
-                Toast.makeText(WorldDataActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                showOfflineData();
             }
         });
+    }
+
+    private void showOfflineData() {
+        Toast.makeText(context, "showing offline data", Toast.LENGTH_SHORT).show();
+        Country[] countryArray = new Gson().fromJson(tinydb.getString("json"),Country[].class);
+        List<Country> newCountryList = new ArrayList<>();
+
+        for(Country c : countryArray)
+        {
+            newCountryList.add(c);
+        }
+
+        adapter  = new CountryAdapter(context,newCountryList);
+        binding.rvcontry.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        binding.rvcontry.setItemViewCacheSize(newCountryList.size());
+        binding.textView2.setText("Last Updated "+Constants.getTimesAgo(tinydb.getString("date"))+", "+tinydb.getString("date"));
+        binding.tvCCount.setText(tinydb.getString("tc"));
+        binding.tvCDelCount.setText("+"+ tinydb.getString("nc"));
+        binding.tvRCount.setText(tinydb.getString("tr"));
+        binding.tvRDelCount.setText("+"+ tinydb.getString("nr"));
+        binding.tvDCount.setText(tinydb.getString("td"));
+        binding.tvDDelCount.setText("+"+ tinydb.getString("nd"));
     }
 
 }

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
-      /*  BannerLayout recyclerBanner =  (BannerLayout) findViewById(R.id.recycler);
+       /* BannerLayout recyclerBanner =  (BannerLayout) findViewById(R.id.recycler);
         BannerLayout bannerVertical =  (BannerLayout) findViewById(R.id.recycler_ver);*/
 
         List<String> list = new ArrayList<>();
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
     //    WebBannerAdapter webBannerAdapter=new WebBannerAdapter(this,list);
 
-      //  WebBannerAdapter WebBannerAdapter2 =new WebBannerAdapter(this,list);
+   //     WebBannerAdapter WebBannerAdapter2 =new WebBannerAdapter(this,list);
 
-      //  binding.recycler.setAdapter(webBannerAdapter);
-       // binding.recyclerVer.setAdapter(WebBannerAdapter2);
+   //     binding.recycler.setAdapter(webBannerAdapter);
+   //     binding.recyclerVer.setAdapter(WebBannerAdapter2);
       /*  recyclerBanner.setAdapter(webBannerAdapter);
         bannerVertical.setAdapter(WebBannerAdapter2);
 */
