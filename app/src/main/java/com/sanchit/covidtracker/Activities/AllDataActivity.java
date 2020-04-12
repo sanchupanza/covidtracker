@@ -29,6 +29,7 @@ import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.Utils.Constants;
 import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
+import com.sanchit.covidtracker.databinding.ActivityMainBinding;
 import com.sanchit.covidtracker.databinding.DialogLayoutBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
@@ -55,7 +56,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         StatewiseDataAdapter.OnStateSelectListener {
 
 
-    private ActivityAllDataNewDesignBinding binding;
+    private ActivityMainBinding binding;
     private Context context;
     private StatewiseDataAdapter adapter;
     private DateWiseAdapter dateWiseAdapter;
@@ -70,7 +71,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_all_data_new_design);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
@@ -122,7 +123,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                         updateList = response.body();
                         Collections.reverse(updateList);
                         UpdateAdapter adapter = new UpdateAdapter(updateList,context);
-                        binding.rvUpdates.setAdapter(adapter);
+                        binding.recycler.setAdapter(adapter);
                     }else
                     {
                         Toast.makeText(AllDataActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
