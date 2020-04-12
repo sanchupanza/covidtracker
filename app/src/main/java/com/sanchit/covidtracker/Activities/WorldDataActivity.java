@@ -88,10 +88,7 @@ public class WorldDataActivity extends AppCompatActivity {
                         binding.rvcontry.setAdapter(adapter);
                         binding.rvcontry.setItemViewCacheSize(countryList.size());
 
-
                         binding.textView2.setText("Last Updated "+Constants.getTimesAgo(date)+", "+date);
-
-
                      //   setData();
                       //  Toast.makeText(WorldDataActivity.this, ""+response.body().getCountries().size(), Toast.LENGTH_SHORT).show();
 

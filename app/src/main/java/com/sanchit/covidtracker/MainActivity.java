@@ -1,15 +1,28 @@
 package com.sanchit.covidtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
+
+import com.sanchit.covidtracker.Activities.AllDataActivity;
+import com.sanchit.covidtracker.Adapters.UpdateAdapter;
+import com.sanchit.covidtracker.BannerLibrary.BannerLayout;
+import com.sanchit.covidtracker.BannerLibrary.WebBannerAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
+import com.sanchit.covidtracker.databinding.ActivityMainBinding;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
+import com.sanchit.covidtracker.response.UpdatesResponse;
 import com.sanchit.covidtracker.response.rawData.RawDataResponse;
 
 import com.sanchit.covidtracker.response.travelHistory.TravelHistoryResponse;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,12 +30,42 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private ActivityMainBinding binding;
+    private Context context;
+    private List<UpdatesResponse> updateList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
-        fetchAllData();
+      /*  BannerLayout recyclerBanner =  (BannerLayout) findViewById(R.id.recycler);
+        BannerLayout bannerVertical =  (BannerLayout) findViewById(R.id.recycler_ver);*/
+
+        List<String> list = new ArrayList<>();
+        list.add("http://img0.imgtn.bdimg.com/it/u=1352823040,1166166164&fm=27&gp=0.jpg");
+        list.add("http://img3.imgtn.bdimg.com/it/u=2293177440,3125900197&fm=27&gp=0.jpg");
+        list.add("http://img3.imgtn.bdimg.com/it/u=3967183915,4078698000&fm=27&gp=0.jpg");
+        list.add("http://img0.imgtn.bdimg.com/it/u=3184221534,2238244948&fm=27&gp=0.jpg");
+        list.add("http://img4.imgtn.bdimg.com/it/u=1794621527,1964098559&fm=27&gp=0.jpg");
+        list.add("http://img4.imgtn.bdimg.com/it/u=1243617734,335916716&fm=27&gp=0.jpg");
+
+
+        getUpdates();
+
+    //    WebBannerAdapter webBannerAdapter=new WebBannerAdapter(this,list);
+
+      //  WebBannerAdapter WebBannerAdapter2 =new WebBannerAdapter(this,list);
+
+      //  binding.recycler.setAdapter(webBannerAdapter);
+       // binding.recyclerVer.setAdapter(WebBannerAdapter2);
+      /*  recyclerBanner.setAdapter(webBannerAdapter);
+        bannerVertical.setAdapter(WebBannerAdapter2);
+*/
+
+        // fetchAllData();
     //    fetchStateWiseData();
     //    fetchTravelHistory();
     //    fetchRawData();
@@ -48,6 +91,40 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void getUpdates() {
+
+        Call<List<UpdatesResponse>> call = SoleInstance.getApiServiceInstance().getUpdates();
+
+        call.enqueue(new Callback<List<UpdatesResponse>>() {
+            @Override
+            public void onResponse(Call<List<UpdatesResponse>> call, Response<List<UpdatesResponse>> response) {
+                if(response.body() !=null)
+                {
+                    if(response.body().size() > 0)
+                    {
+                        updateList = response.body();
+                        Collections.reverse(updateList);
+                        WebBannerAdapter webBannerAdapter=new WebBannerAdapter(MainActivity.this,updateList);
+                        binding.recycler.setAdapter(webBannerAdapter);
+
+
+                    }else
+                    {
+                        Toast.makeText(MainActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                    }
+                }else
+                {
+                    Toast.makeText(MainActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UpdatesResponse>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchRawData() {

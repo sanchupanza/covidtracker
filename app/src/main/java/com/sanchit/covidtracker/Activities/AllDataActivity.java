@@ -1,9 +1,11 @@
 package com.sanchit.covidtracker.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -22,10 +24,12 @@ import com.sanchit.covidtracker.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Adapters.DistrictAdapter;
 import com.sanchit.covidtracker.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Adapters.UpdateAdapter;
+import com.sanchit.covidtracker.ApplicationClass.CovidTrackerApp;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.Utils.Constants;
 import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
+import com.sanchit.covidtracker.databinding.DialogLayoutBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
@@ -314,6 +318,10 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
                 .canceledOnTouchOutside(true)
                 .customView(R.layout.dialog_layout, true)
                 .show();
+
+
+
+
 
 
         final TextView tvDate = (TextView) dateDialog.findViewById(R.id.tv_date);
