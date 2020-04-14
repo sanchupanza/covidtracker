@@ -2,6 +2,7 @@ package com.sanchit.covidtracker.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.sanchit.covidtracker.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.databinding.ActivityGraphsBinding;
@@ -24,6 +28,8 @@ import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,21 +40,45 @@ public class GraphsActivity extends AppCompatActivity {
 
     private ActivityGraphsBinding binding;
     private Context context;
-    private List<Statewise> statewiseList;
+
     private List<CasesTimeSeries> dateList;
-    private List<String> dates = new ArrayList<>();
-    private List<Float> dateValues = new ArrayList<>();
-    private List<String> states = new ArrayList<>();
-    private List<Float> stateValues = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_graphs);
         context = this;
+        binding.rvDatesList.setLayoutManager(new LinearLayoutManager(this));
+
+        if(getIntent().hasExtra("list"))
+        {
+            dateList = getIntent().getParcelableArrayListExtra("list");
+        }
+
+
+        DateWiseAdapter dateWiseAdapter = new DateWiseAdapter(dateList, context);
+        binding.rvDatesList.setAdapter(dateWiseAdapter);
+        binding.rvDatesList.setItemViewCacheSize(dateList.size());
+
         fetchAllData();
 
 
+
+/*
+
+        LineGraphSeries<DataPoint> series;
+        series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        binding.lineChart.setCursorMode(true);
+        binding.lineChart.setTitle("Dates");
+        binding.lineChart.addSeries(series);
+*/
 
 
 
@@ -116,25 +146,38 @@ public class GraphsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DataResponse> call, Response<DataResponse> response) {
 
+                List<CasesTimeSeries> graphlist;
+             //   List<CasesTimeSeries> dateList;
                 if (response != null) {
                     if (response.body() != null) {
 
 
-                        statewiseList = response.body().getStatewise();
-                        dateList = response.body().getCasesTimeSeries();
+                    //    statewiseList = response.body().getStatewise();
+                      /*  dateList = response.body().getCasesTimeSeries();
+                        DateWiseAdapter dateWiseAdapter = new DateWiseAdapter(dateList, context);
+                        binding.rvDatesList.setAdapter(dateWiseAdapter);
+                        binding.rvDatesList.setItemViewCacheSize(dateList.size());*/
 
-                        for(int i=0; i<dateList.size();i++)
+
+                        graphlist = response.body().getCasesTimeSeries();
+
+
+
+                        for(int i=0; i<graphlist.size();i++)
                         {
-                            if(dateList.size()!=30)
-                            {
-                                dateList.remove(i);
-                                i--;
-                            }
+
+                                if(graphlist.size()!=7)
+                                {
+                                    graphlist.remove(i);
+                                    i--;
+                                }
 
                         }
-                        statewiseList.remove(0);
+                     //   statewiseList.remove(0);
 
-                        prepareList();
+
+
+                        prepareList(graphlist);
 
 
                     } else {
@@ -154,7 +197,11 @@ public class GraphsActivity extends AppCompatActivity {
 
     }
 
-    private void prepareList() {
+    private void prepareList(List<CasesTimeSeries> dateList) {
+        List<String> dates = new ArrayList<>();
+        List<Float> dateValues = new ArrayList<>();
+
+
 
         for(int i= 0; i<dateList.size(); i++)
         {
@@ -163,18 +210,18 @@ public class GraphsActivity extends AppCompatActivity {
         }
 
 
-        for(int i = 0; i<statewiseList.size(); i++)
+  /*      for(int i = 0; i<statewiseList.size(); i++)
         {
             states.add(statewiseList.get(i).getState());
             stateValues.add(Float.parseFloat(statewiseList.get(i).getConfirmed()));
-        }
+        }*/
 
-        setDataToGraph();
-        setDataToPie();
+        setDataToGraph(dates,dateValues);
+     //   setDataToPie();
 
     }
 
-    private void setDataToPie() {
+    /*private void setDataToPie() {
 
 
 
@@ -209,16 +256,22 @@ public class GraphsActivity extends AppCompatActivity {
         binding.pieChart.setTouchEnabled(true);
         binding.pieChart.animateX(1000);
 
-    }
+    }*/
 
-    private void setDataToGraph() {
+    private void setDataToGraph(List<String> dates, List<Float> dateValues) {
 
-        ArrayList<Entry> lineEntries = new ArrayList<>();
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+   //     ArrayList<Entry> lineEntry = new ArrayList<>();
 
 
         for(int i = 0; i<dateValues.size(); i++)
         {
-            lineEntries.add(new Entry(dateValues.get(i),i));
+            if(dateValues.get(i)!=0.0)
+            {
+                barEntries.add(new BarEntry(dateValues.get(i),i));
+                //     lineEntry.add(new Entry(dateValues.get(i),i));
+            }
+
         }
 
       /*  ArrayList<Entry> lineEntries = new ArrayList<>();
@@ -230,13 +283,44 @@ public class GraphsActivity extends AppCompatActivity {
         lineEntries.add(new Entry(94f,4));*/
 
 
-        LineDataSet dataSet1 = new LineDataSet(lineEntries,"Dates");
+
+
+
+
+        BarDataSet dataSet1 = new BarDataSet(barEntries,"Dates");
+     //   LineDataSet dataSet2 = new LineDataSet(lineEntry,"Dates");
+
+        BarData barData = new BarData(dates,dataSet1);
+     //   LineData lineData = new LineData(dates,dataSet2);
+
+        binding.barGraph.setVisibleXRangeMaximum(10);
+        binding.barGraph.moveViewToX(30);
+        binding.barGraph.setData(barData);
+        binding.barGraph.invalidate();
+        binding.barGraph.setMinimumWidth(5000);
+        binding.barGraph.setTouchEnabled(true);
+        binding.barGraph.setDragEnabled(true);
+        binding.barGraph.requestFocus();
+        binding.barGraph.animateX(1000);
+        binding.barGraph.setDescription("");
+
+      /*  binding.lineGraph.setVisibleXRangeMaximum(10);
+        binding.lineGraph.moveViewToX(30);
+        binding.lineGraph.setData(lineData);
+        binding.lineGraph.invalidate();
+        binding.lineGraph.setMinimumWidth(5000);
+        binding.lineGraph.setTouchEnabled(true);
+        binding.lineGraph.setDragEnabled(true);
+        binding.lineGraph.requestFocus();
+        binding.lineGraph.animateX(1000);
+        binding.lineGraph.setDescription("");*/
+
 /*
 
         ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
         lineDataSets.add(dataSet1);
 */
-
+/*
         ViewPortHandler viewPortHandler = binding.lineChart.getViewPortHandler();
         float scaleX = viewPortHandler.getScaleX();
         float scaleY = viewPortHandler.getScaleY();
@@ -249,7 +333,7 @@ public class GraphsActivity extends AppCompatActivity {
         binding.lineChart.setTouchEnabled(true);
         binding.lineChart.setDragEnabled(true);
         binding.lineChart.requestFocus();
-        binding.lineChart.animateX(1000);
+        binding.lineChart.animateX(1000);*/
 
     }
 

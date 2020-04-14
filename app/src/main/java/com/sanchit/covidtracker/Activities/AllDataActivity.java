@@ -1,11 +1,10 @@
 package com.sanchit.covidtracker.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -24,13 +23,10 @@ import com.sanchit.covidtracker.Adapters.DateWiseAdapter;
 import com.sanchit.covidtracker.Adapters.DistrictAdapter;
 import com.sanchit.covidtracker.Adapters.StatewiseDataAdapter;
 import com.sanchit.covidtracker.Adapters.UpdateAdapter;
-import com.sanchit.covidtracker.ApplicationClass.CovidTrackerApp;
 import com.sanchit.covidtracker.Network.SoleInstance;
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.Utils.Constants;
-import com.sanchit.covidtracker.databinding.ActivityAllDataNewDesignBinding;
 import com.sanchit.covidtracker.databinding.ActivityMainBinding;
-import com.sanchit.covidtracker.databinding.DialogLayoutBinding;
 import com.sanchit.covidtracker.response.AllData.CasesTimeSeries;
 import com.sanchit.covidtracker.response.AllData.DataResponse;
 import com.sanchit.covidtracker.response.AllData.Statewise;
@@ -38,14 +34,8 @@ import com.sanchit.covidtracker.response.DistrictwiseData.DistrictDatum;
 import com.sanchit.covidtracker.response.DistrictwiseData.DistrictWiseResponse;
 import com.sanchit.covidtracker.response.UpdatesResponse;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,11 +68,13 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
         binding.rvStatewise.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(this));
-
+        TinyDB tinyDB = new TinyDB(context);
         fetchAllData();
         animation();
         getDistrictwiseData();
         getUpdates();
+
+
 
 
         binding.btnStatewise.setOnClickListener(v -> visbileStatewiseLayout());
@@ -154,6 +146,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
     private void openGraphsActivity() {
         Intent intent = new Intent(context, GraphsActivity.class);
+        intent.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) dateList);
         startActivity(intent);
     }
 
@@ -327,7 +320,7 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
 
 
-        final TextView tvDate = (TextView) dateDialog.findViewById(R.id.tv_date);
+        final TextView tvDate = (TextView) dateDialog.findViewById(R.id.tv_month);
         final TextView tvDailyConfirm = (TextView) dateDialog.findViewById(R.id.tv_d_c);
         final TextView tvDailyRecoverd = (TextView) dateDialog.findViewById(R.id.tv_d_r);
         final TextView tvDailyDeath = (TextView) dateDialog.findViewById(R.id.tv_d_d);

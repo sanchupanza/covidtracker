@@ -106,14 +106,12 @@ public class WorldDataActivity extends AppCompatActivity {
 
                     }else
                     {
-                        Toast.makeText(WorldDataActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
                         showOfflineData();
 
                     }
                 }else
                 {
 
-                    Toast.makeText(WorldDataActivity.this, "null response", Toast.LENGTH_SHORT).show();
                     showOfflineData();
 
                 }
@@ -135,7 +133,6 @@ public class WorldDataActivity extends AppCompatActivity {
         {
             newCountryList.add(c);
         }
-
         adapter  = new CountryAdapter(context,newCountryList);
         binding.rvcontry.setAdapter(adapter);
         adapter.notifyDataSetChanged();

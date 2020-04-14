@@ -1,9 +1,12 @@
 package com.sanchit.covidtracker.response.AllData;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CasesTimeSeries {
+public class CasesTimeSeries  implements Parcelable {
 
     @SerializedName("dailyconfirmed")
     @Expose
@@ -26,6 +29,28 @@ public class CasesTimeSeries {
     @SerializedName("totalrecovered")
     @Expose
     private String totalrecovered;
+
+    protected CasesTimeSeries(Parcel in) {
+        dailyconfirmed = in.readString();
+        dailydeceased = in.readString();
+        dailyrecovered = in.readString();
+        date = in.readString();
+        totalconfirmed = in.readString();
+        totaldeceased = in.readString();
+        totalrecovered = in.readString();
+    }
+
+    public static final Creator<CasesTimeSeries> CREATOR = new Creator<CasesTimeSeries>() {
+        @Override
+        public CasesTimeSeries createFromParcel(Parcel in) {
+            return new CasesTimeSeries(in);
+        }
+
+        @Override
+        public CasesTimeSeries[] newArray(int size) {
+            return new CasesTimeSeries[size];
+        }
+    };
 
     public String getDailyconfirmed() {
         return dailyconfirmed;
@@ -81,5 +106,21 @@ public class CasesTimeSeries {
 
     public void setTotalrecovered(String totalrecovered) {
         this.totalrecovered = totalrecovered;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(dailyconfirmed);
+        parcel.writeString(dailydeceased);
+        parcel.writeString(dailyrecovered);
+        parcel.writeString(date);
+        parcel.writeString(totalconfirmed);
+        parcel.writeString(totaldeceased);
+        parcel.writeString(totalrecovered);
     }
 }
