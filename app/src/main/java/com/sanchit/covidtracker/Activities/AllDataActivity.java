@@ -145,8 +145,8 @@ public class AllDataActivity extends AppCompatActivity implements DateWiseAdapte
 
 
     private void openGraphsActivity() {
-        Intent intent = new Intent(context, GraphsActivity.class);
-        intent.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) dateList);
+        Intent intent = new Intent(context, HomeActivity.class);
+       // intent.putParcelableArrayListExtra("list", (ArrayList<? extends Parcelable>) dateList);
         startActivity(intent);
     }
 

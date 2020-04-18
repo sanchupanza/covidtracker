@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sanchit.covidtracker.R;
 import com.sanchit.covidtracker.Utils.Constants;
+import com.sanchit.covidtracker.databinding.SingleUpdateItemLayoutBinding;
 import com.sanchit.covidtracker.databinding.SingleUpdateLayoutBinding;
 import com.sanchit.covidtracker.response.UpdatesResponse;
 
@@ -28,7 +29,7 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
     @NonNull
     @Override
     public UpdateAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        SingleUpdateLayoutBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.single_update_layout,parent,false);
+        SingleUpdateItemLayoutBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.single_update_item_layout,parent,false);
         return new UpdateAdapter.MyViewHolder(binding);
     }
 
@@ -45,8 +46,8 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        SingleUpdateLayoutBinding binding;
-        public MyViewHolder(@NonNull SingleUpdateLayoutBinding binding) {
+        SingleUpdateItemLayoutBinding binding;
+        public MyViewHolder(@NonNull SingleUpdateItemLayoutBinding binding) {
             super(binding.getRoot());
             this.binding=binding;
 

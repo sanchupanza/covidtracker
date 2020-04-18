@@ -12,12 +12,14 @@ public class PreferencesUtil {
 
     private static boolean loggedIn;
     private static String fcmToken;
+    private static String totalcases;
 
 
     public static void loadPreferences() {
 
         loggedIn = preferences.getBoolean("loggedIn", false);
         fcmToken = preferences.getString("fcm",fcmToken);
+        totalcases=preferences.getString("totalcases",totalcases);
 
     }
 
@@ -40,6 +42,15 @@ public class PreferencesUtil {
         preferences.edit().putString("fcm",fcmToken).apply();
     }
 
+    public static String getTotalcases() {
+        return totalcases;
+    }
+
+    public static void setTotalcases(String totalcases) {
+        PreferencesUtil.totalcases = totalcases;
+        preferences.edit().putString("totalcases",totalcases).apply();
+    }
+
     public static void clearPrefs() {
 
         preferences.edit().clear().apply();
@@ -50,6 +61,7 @@ public class PreferencesUtil {
 
         loadPreferences();
     }
+
 
 
 }

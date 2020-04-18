@@ -16,21 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.GraphsActivity"></activity>
+        <activity android:name=".Activities.HomeActivity"></activity>
+        <activity android:name=".Activities.GraphsActivity" />
         <activity android:name=".Activities.WorldDataActivity" />
         <activity android:name=".Activities.CalenderActivity" />
         <activity android:name=".Activities.AllDataActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

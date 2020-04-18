@@ -40,7 +40,6 @@ repositories {
 }
 
 
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -75,5 +74,8 @@ dependencies {
 
     implementation 'com.applandeo:material-calendar-view:1.7.0'
     implementation project(path: ':library')
+
+    implementation 'com.eftimoff:androidplayer:1.0.3@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
 
 }
